@@ -80,7 +80,7 @@ const App = (props) => {
             blogs
           </Menu.Item>
           <Menu.Item id = {styles['menuLink']} as = { Link } to = "/users"
-            name = 'home' data-cy="usersPage">
+            name = 'home'>
             users
           </Menu.Item>
           {(props.user === null || props.user.user === undefined) ?

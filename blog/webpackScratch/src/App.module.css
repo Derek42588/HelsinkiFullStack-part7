@@ -1,0 +1,25 @@
+#menuButton {
+    margin-left: 20px;
+    background-color: rgb(1, 56, 1)
+}
+#menuLink {
+    background-color: green;
+    color: white;
+}
+
+#pageHeader {
+    color: green;
+    text-align: center;
+}
+
+#formButton {
+    margin-left: 20px;
+    margin-top: 20px;
+    color: white;
+    background-color: rgb(1, 56, 1)
+}
+#toggleButtons #cancelButton {
+    margin-left: 20px;
+    margin-top: 20px;
+    background-color: rgb(1, 56, 1)
+}

@@ -61,17 +61,17 @@ const LoginForm = ({
       <Form onSubmit={handleLogin} id = "loginForm">
         <div>
               username
-          <input data-cy = "username"
+          <input
             {...user}
           />
         </div>
         <div>
               password
-          <input data-cy = "password"
+          <input
             {...pass}
           />
         </div>
-        <Button id = {styles['formButton']} primary type="submit" data-cy ="submitLogin">login</Button>
+        <Button id = {styles['formButton']} primary type="submit">login</Button>
       </Form>
 
     </div>

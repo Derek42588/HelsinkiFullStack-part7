@@ -61,25 +61,25 @@ const BlogForm = ({
     <Form onSubmit={addBlog} id = "addBlog">
       <div>
               title:
-        <input data-cy="title"
+        <input
           {...t}
         />
       </div>
       <div>
               author:
-        <input data-cy="author"
+        <input
           {...a}
 
         />
       </div>
       <div>
               url:
-        <input data-cy="url"
+        <input
           {...u}
 
         />
       </div>
-      <Button id = {styles['formButton']} primary type="submit" data-cy="submitBlog">save</Button>
+      <Button id = {styles['formButton']} primary type="submit">save</Button>
     </Form>
   )
 
