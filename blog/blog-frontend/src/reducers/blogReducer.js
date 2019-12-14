@@ -9,6 +9,8 @@ const blogReducer = (state = [], action) => {
     return action.data
   case 'UPVOTE_BLOG':
     return action.data
+  case 'COMMENT_ON_BLOG':
+    return action.data
   case 'REMOVE_BLOG':
     return action.data
   default:
@@ -38,6 +40,22 @@ export const upvoteBlog = (blog) => {
     sortByLikes(blogs)
     dispatch({
       type: 'UPVOTE_BLOG',
+      data: blogs
+    })
+  }
+}
+
+export const commentOnBlog = (blog, comment) => {
+  return async dispatch => {
+    const commentedBlog = {
+      ...blog,
+      comments: blog.comments.concat(comment)
+    }
+    await blogService.addComment(commentedBlog.id, commentedBlog)
+    const blogs = await blogService.getAll()
+    sortByLikes(blogs)
+    dispatch({
+      type: 'COMMENT_ON_BLOG',
       data: blogs
     })
   }

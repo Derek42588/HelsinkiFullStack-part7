@@ -1,7 +1,7 @@
 import React from 'react'
 
 const User = ({ user }) => {
-  console.log('User Component' + user)
+  // console.log('User Component' + user)
 
   if (user === null) {
     return null

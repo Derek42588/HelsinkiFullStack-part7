@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { useField } from '../hooks/index'
 import { setUser } from '../reducers/usersReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Button, Form } from 'semantic-ui-react'
+import styles from '../App.module.css'
 
 import loginService from '../services/login'
 import blogService from '../services/blogs'
@@ -56,7 +58,7 @@ const LoginForm = ({
     <div className = "loginForm">
       <h2> Login </h2>
 
-      <form onSubmit={handleLogin} id = "loginForm">
+      <Form onSubmit={handleLogin} id = "loginForm">
         <div>
               username
           <input
@@ -69,8 +71,8 @@ const LoginForm = ({
             {...pass}
           />
         </div>
-        <button type="submit">login</button>
-      </form>
+        <Button id = {styles['formButton']} primary type="submit">login</Button>
+      </Form>
 
     </div>
   )

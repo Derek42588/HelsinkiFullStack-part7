@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { Container } from 'semantic-ui-react'
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect, withRouter
+  Route, Link
 } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BlogList from './components/BlogList'
@@ -19,14 +19,11 @@ import Togglable from './components/Togglable'
 import { setUser, removeUser, setUsersList } from './reducers/usersReducer'
 import { setNotification } from './reducers/notificationReducer'
 import { setBlogs, createBlog } from './reducers/blogReducer'
-import { Menu, Button } from 'semantic-ui-react'
+import { Menu, Button, Header } from 'semantic-ui-react'
 import styles from './App.module.css'
 import blogService from './services/blogs'
 
 const App = (props) => {
-  const padding = {
-    padding: 5
-  }
 
   useEffect(() => {
     props.setBlogs()
@@ -73,32 +70,32 @@ const App = (props) => {
   return (
     <Container>
       <Router>
-        <Menu id = {styles["menuLink"]}>
-          <Menu.Item id = {styles["menuLink"]} as = { Link } to = "/"
+        <Menu id = {styles['menuLink']}>
+          <Menu.Item id = {styles['menuLink']} as = { Link } to = "/"
             name = 'home'>
             home
           </Menu.Item>
-          <Menu.Item id = {styles["menuLink"]} as = { Link } to = "/blogs"
+          <Menu.Item id = {styles['menuLink']} as = { Link } to = "/blogs"
             name = 'home'>
             blogs
           </Menu.Item>
-          <Menu.Item id = {styles["menuLink"]} as = { Link } to = "/users"
+          <Menu.Item id = {styles['menuLink']} as = { Link } to = "/users"
             name = 'home'>
             users
           </Menu.Item>
           {(props.user === null || props.user.user === undefined) ?
             null
             :
-            <Menu.Item id = {styles["menuLink"]} position = "right">
+            <Menu.Item id = {styles['menuLink']} position = "right">
 
-              {props.user.user.name} logged in 
-              <Button id = {styles["menuButton"]} primary onClick = {handleLogout}>logout</Button>
+              {props.user.user.name} logged in
+              <Button id = {styles['menuButton']} primary onClick = {handleLogout}>logout</Button>
 
             </Menu.Item>
           }
         </Menu>
 
-        <h1>Blogs</h1>
+        <Header id = {styles['pageHeader']} size = 'huge'>Blogs</Header>
 
         <Notification />
 

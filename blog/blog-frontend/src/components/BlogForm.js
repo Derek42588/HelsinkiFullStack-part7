@@ -1,17 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { useField } from '../hooks/index'
-import { createBlog } from '../reducers/blogReducer'
+import { createBlog, setBlogs } from '../reducers/blogReducer'
 import { setUsersList } from '../reducers/usersReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import { Button } from 'semantic-ui-react'
+import { Button, Form } from 'semantic-ui-react'
 import styles from '../App.module.css'
 
 const BlogForm = ({
 
   createBlog,
   setNotification,
-  setUsersList
+  setUsersList,
+  setBlogs
 
 }) => {
   const author = useField('text')
@@ -52,11 +53,12 @@ const BlogForm = ({
         type: 'success'
       }, 10)
     setUsersList()
+    setBlogs()
 
   }
 
   return (
-    <form onSubmit={addBlog} id = "addBlog">
+    <Form onSubmit={addBlog} id = "addBlog">
       <div>
               title:
         <input
@@ -77,8 +79,8 @@ const BlogForm = ({
 
         />
       </div>
-      <Button id = {styles["menuButton"]} primary type="submit">save</Button>
-    </form>
+      <Button id = {styles['formButton']} primary type="submit">save</Button>
+    </Form>
   )
 
 }
@@ -86,7 +88,8 @@ const BlogForm = ({
 const mapDispatchToProps = {
   createBlog,
   setNotification,
-  setUsersList
+  setUsersList,
+  setBlogs
 }
 
 const ConnectedBlogForm = connect(null, mapDispatchToProps)(BlogForm)

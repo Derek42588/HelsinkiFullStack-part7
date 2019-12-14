@@ -1,21 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { setBlogs, upvoteBlog, deleteBlog } from '../reducers/blogReducer'
+import { setBlogs, upvoteBlog, deleteBlog, commentOnBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { setUsersList } from '../reducers/usersReducer'
+import { useField } from '../hooks/index'
+import { Button } from 'semantic-ui-react'
+import styles from '../App.module.css'
 
 
-const blogStyle = {
-  paddingTop: 10,
-  paddingLeft: 2,
-  border: 'solid',
-  borderWidth: 1,
-  marginBottom: 5
-}
-const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersList }) => {
+const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersList, history, commentOnBlog }) => {
   // const [expanded, setExpanded] = useState(false)
 
   // const hideWhenVisible = { display: expanded ? 'none' : '' }
@@ -24,6 +20,14 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersLis
   // const toggleExpanded = () => {
   //   setExpanded(!expanded)
   // }
+  const comment = useField('text')
+
+  let c = {
+    type: comment.type,
+    value: comment.value,
+    onChange: comment.onChange,
+  }
+
   if (blog === null) {
     return null
   }
@@ -40,6 +44,7 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersLis
         message: `blog ${blog.title} by ${blog.author} successfully removed`,
         type: 'success'
       }, 5)
+      history.push('/')
     }
   }
 
@@ -50,11 +55,69 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersLis
     )
   }
 
+
   const addLike = (event) => {
     event.stopPropagation()
     upvoteBlog(blog)
   }
+
+  const showComments = (comments) => {
+    return (
+      <div>
+        <h2>comments</h2>
+        <form onSubmit={addComment} id = "addComment">
+          <div>
+              comment:
+            <input
+              {...c}
+            />
+            <Button id = {styles['menuButton']} primary type="submit">add comment</Button>
+          </div>
+        </form>
+        <ul>
+          {comments.map(comment =>
+            <li key = {comment.id}>{comment.comment}</li>
+          )}
+        </ul>
+      </div>
+    )
+  }
+
+  const addComment = (event) => {
+    event.preventDefault()
+
+    const commentObject = {
+      comment: comment.value,
+      id: blog.id + blog.comments.length
+    }
+
+    comment.reset()
+    commentOnBlog(blog, commentObject)
+    setUsersList()
+    setBlogs()
+
+  }
+
+  const commentForm = () => {
+    return (
+      <div>
+        <h2>comments</h2>
+        <form onSubmit={addComment} id = "addComment">
+          <div>
+              comment:
+            <input
+              {...c}
+            />
+            <Button id = {styles['formButton']} primary type="submit">add comment</Button>
+          </div>
+
+        </form>
+      </div>
+    )
+  }
+
   const showBlog = () => {
+
     return (
       <div>
         <h1>
@@ -64,7 +127,7 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersLis
           <a href = {blog.url}>{blog.url}</a>
         </p>
         <p>
-          {blog.likes} likes <button onClick = {addLike}>like</button>
+          {blog.likes} likes  <Button id = {styles['formButton']} onClick={addLike}>like</Button>
         </p>
         <p>
           added by {blog.user.username}
@@ -75,6 +138,13 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersLis
             :
             null
         }
+        {
+          blog.comments.length > 0 ?
+            showComments(blog.comments)
+            :
+            commentForm()
+        }
+
       </div>
 
     )
@@ -104,9 +174,10 @@ const mapDispatchToProps = {
   setBlogs,
   upvoteBlog,
   deleteBlog,
+  commentOnBlog,
   setNotification,
   setUsersList
 }
 
-const ConnectedBlog = connect(mapStateToProps, mapDispatchToProps)(Blog)
+const ConnectedBlog = connect(mapStateToProps, mapDispatchToProps)(withRouter(Blog))
 export default ConnectedBlog
