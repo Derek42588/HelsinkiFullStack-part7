@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setBlogs, upvoteBlog, deleteBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { setUsersList } from '../reducers/usersReducer'
+
 
 const blogStyle = {
   paddingTop: 10,
@@ -13,20 +15,27 @@ const blogStyle = {
   borderWidth: 1,
   marginBottom: 5
 }
-const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification }) => {
-  const [expanded, setExpanded] = useState(false)
+const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification, setUsersList }) => {
+  // const [expanded, setExpanded] = useState(false)
 
-  const hideWhenVisible = { display: expanded ? 'none' : '' }
-  const showWhenVisible = { display: expanded ? '' : 'none' }
+  // const hideWhenVisible = { display: expanded ? 'none' : '' }
+  // const showWhenVisible = { display: expanded ? '' : 'none' }
 
-  const toggleExpanded = () => {
-    setExpanded(!expanded)
+  // const toggleExpanded = () => {
+  //   setExpanded(!expanded)
+  // }
+  if (blog === null) {
+    return null
+  }
+  if (blog === undefined) {
+    return null
   }
 
-  const removeBlog = () => {
+  const removeBlog = async () => {
     let result = window.confirm(`remove blog ${blog.title} by ${blog.author}?`)
     if (result) {
-      deleteBlog(blog.id)
+      await deleteBlog(blog.id)
+      setUsersList()
       setNotification({
         message: `blog ${blog.title} by ${blog.author} successfully removed`,
         type: 'success'
@@ -47,32 +56,27 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification }) => {
   }
   const showBlog = () => {
     return (
-      <div style = {blogStyle} className = "blog">
-        <div onClick = {toggleExpanded} style = {hideWhenVisible} className = 'truncated'>
+      <div>
+        <h1>
           {blog.title} by {blog.author}
-        </div>
-        <div onClick = {toggleExpanded} style = {showWhenVisible} className = 'expanded'>
-          <p>
-            {blog.title} by {blog.author}
-          </p>
-          <p>
-            <a href = {blog.url}>{blog.url}</a>
-          </p>
-          <p>
-            {blog.likes} likes <button onClick = {addLike}>like</button>
-          </p>
-          <p>
+        </h1>
+        <p>
+          <a href = {blog.url}>{blog.url}</a>
+        </p>
+        <p>
+          {blog.likes} likes <button onClick = {addLike}>like</button>
+        </p>
+        <p>
           added by {blog.user.username}
-          </p>
-          {
-            user.username === blog.user.username ?
-              showDelete()
-              :
-              null
-          }
-        </div>
-
+        </p>
+        {
+          user.user.username === blog.user.username ?
+            showDelete()
+            :
+            null
+        }
       </div>
+
     )
 
   }
@@ -80,7 +84,7 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification }) => {
   return (
     <div >
       {
-        user === null ?
+        user.user === null ?
           null:
           showBlog()
       }
@@ -88,14 +92,10 @@ const Blog = ({ blog, user, deleteBlog, upvoteBlog, setNotification }) => {
   )
 }
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  // addLike: PropTypes.func.isRequired,
-  // deleteBlog: PropTypes.func.isRequired
-}
 
 const mapStateToProps = (state) => {
   return {
+    // user: state.user.user
     user: state.user
   }
 }
@@ -104,7 +104,8 @@ const mapDispatchToProps = {
   setBlogs,
   upvoteBlog,
   deleteBlog,
-  setNotification
+  setNotification,
+  setUsersList
 }
 
 const ConnectedBlog = connect(mapStateToProps, mapDispatchToProps)(Blog)
